@@ -20,4 +20,16 @@ playlist:Playlist = {
   ngOnInit() {
   }
 
+  mode = 'show'
+
+  edit(){
+    this.mode = 'edit'
+  }
+  cancel(){
+    this.mode = 'show'
+  }
+  save(){
+    console.log('Save')
+  }
+
 }

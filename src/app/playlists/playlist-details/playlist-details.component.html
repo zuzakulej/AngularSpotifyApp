@@ -1,4 +1,4 @@
-<div>
+<div [hidden]="mode == 'edit'">
   <dl>
     <dt>Name:</dt>
     <dd>{{playlist.name}}</dd>
@@ -7,25 +7,25 @@
     <dt>Color:</dt>
     <dd [style.backgroundColor]="playlist.color">{{playlist.color}}</dd>
   </dl>  
+  <input type="button" class="btn btn-info" value="Edit" (click)=edit()>
 </div>
 
-<div>
+<div [hidden]="mode == 'show'">
   <div class="form-group">
-    <label for="">Name</label>
+    <label for="">Name:</label>
     <input type="text" class="form-control" 
-    [ngModel]="playlist.name"
-    (ngModelChange)="playlist.name = $event">
+    [(ngModel)]="playlist.name">
   </div>
   <div class="form-group">
-    <label for="">Favourite</label>
+    <label for="">Favourite:</label>
     <input type="checkbox" 
-    [ngModel]="playlist.favourite"
-    (ngModelChange)="playlist.favourite = $event">
+    [(ngModel)]="playlist.favourite">
   </div>
   <div class="form-group">
-    <label for="">Color</label>
+    <label for="">Color:</label>
     <input type="color" 
-    [ngModel]="playlist.color"
-    (ngModelChange)="playlist.color = $event">
+    [(ngModel)]="playlist.color">
   </div>
+  <input type="button" class="btn btn-danger" value="Cancel" (click)=cancel()>
+  <input type="button" class="btn btn-success" value="Save" (click)=save()>
 </div>
