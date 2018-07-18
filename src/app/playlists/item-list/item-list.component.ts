@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
   // styleUrls: ['./item-list.component.css']
+  encapsulation: ViewEncapsulation.Emulated,
   styles: [` 
-    p{
+    :host{
+      border: 1px solid black;
+      display: block;
+    }
+    :host(.colored) p{
       color: hotpink;
     }
   `]
