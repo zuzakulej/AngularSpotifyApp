@@ -1,4 +1,4 @@
-<div [hidden]="mode == 'edit'">
+<div *ngIf="mode == 'show'">
   <dl>
     <dt>Name:</dt>
     <dd>{{playlist.name}}</dd>
@@ -10,7 +10,7 @@
   <input type="button" class="btn btn-info" value="Edit" (click)=edit()>
 </div>
 
-<div [hidden]="mode == 'show'">
+<div *ngIf="mode == 'edit'">
   <div class="form-group">
     <label for="">Name:</label>
     <input type="text" class="form-control" 
