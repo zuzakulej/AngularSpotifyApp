@@ -9,6 +9,14 @@ import { PlaylistDetailsComponent } from './playlist-details/playlist-details.co
   imports: [
     CommonModule
   ],
-  declarations: [PlaylistsComponent, ItemListComponent, ListItemComponent, PlaylistDetailsComponent]
+  declarations: [ 
+    PlaylistsComponent, 
+    ItemListComponent, 
+    ListItemComponent, 
+    PlaylistDetailsComponent
+  ],
+  exports:[
+    PlaylistsComponent
+  ]
 })
 export class PlaylistsModule { }
