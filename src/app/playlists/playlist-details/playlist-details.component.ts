@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Playlist } from '../../model/playlist';
 
 @Component({
@@ -8,12 +8,8 @@ import { Playlist } from '../../model/playlist';
 })
 export class PlaylistDetailsComponent implements OnInit {
 
-playlist:Playlist = {
-  id: 111,
-  name: 'Hit!',
-  favourite: true,
-  color: '#ff0000'
-}
+@Input()
+playlist:Playlist
 
   constructor() { }
 
@@ -28,8 +24,16 @@ playlist:Playlist = {
   cancel(){
     this.mode = 'show'
   }
-  save(){
-    console.log('Save')
+
+  @Output("save")
+  saveEmitter = new EventEmitter()
+
+  save(formRef){
+    const playlist = {
+      ...this.playlist,
+      ...formRef.value
+    }
+    this.saveEmitter.emit(playlist)
   }
 
 }
