@@ -1,9 +1,13 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <app-item-list [items]="playlists" [selected]="selected" (selectedChange)="selected = $event">
+      <app-item-list [items]="playlists" 
+      [selected]="selected" 
+      (selectedChange)="selected = $event">
       </app-item-list>
-      <app-item-list [items]="playlists" [selected]="selected" (selectedChange)="selected = $event">
+      <!-- the same as above: -->
+      <app-item-list [items]="playlists" 
+      [(selected)]="selected">
         </app-item-list>
     </div>
     <div class="col">
