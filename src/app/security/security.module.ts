@@ -5,6 +5,12 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule
   ],
-  declarations: []
+  declarations: [],
+  providers:[
+    {
+      provide:'Storage',
+      useValue: window.localStorage
+    }
+  ]
 })
 export class SecurityModule { }

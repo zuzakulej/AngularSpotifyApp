@@ -6,22 +6,32 @@ import { DOCUMENT } from '@angular/platform-browser';
   providedIn: 'root'
 })
 export class SecurityService {
-  constructor(@Inject(DOCUMENT) private document: Document) { }
+  constructor(
+    @Inject(DOCUMENT) 
+    private document: Document,
+    @Inject('Storage')
+    private storage: Storage
+) { }
   
   token:string
   
   getToken() {
+    this.token = JSON.parse(this.storage.getItem('token'))
     if(!this.token && this.document.location.hash){
       const params = new HttpParams({
         fromString: this.document.location.hash.substr(1)
       })
       this.token = params.get('access_token')
+      this.storage.setItem('token',JSON.stringify(this.token))
     }
     if (!this.token){
       this.authorize()
     }
     return this.token
   }  
+
+  // testzaq@gmail.com
+  // test
 
   private config = {
     auth_url: 'https://accounts.spotify.com/authorize',
@@ -45,6 +55,7 @@ export class SecurityService {
       }
     })
     this.document.location.replace(this.config.auth_url + '?' + params.toString() )
+    this.storage.removeItem('token')
   }
 
 }

@@ -5,6 +5,12 @@ import { SecurityService } from '../security/security.service';
 
 export const SEARCH_URL = new InjectionToken('URL for albums search API')
 
+interface AlbumsResponse{
+  albums:{
+    items:Album[]
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +23,7 @@ export class MusicService {
 ) { }
 
   getAlbums(query = "batman") {
-    this.http.get(this.api_url, {
+    return this.http.get(this.api_url, {
       headers: {
         Authorization: 'Bearer ' + this.security.getToken()
       },
@@ -25,11 +31,7 @@ export class MusicService {
         type: 'album',
         q: query,
       }
-    }).subscribe(response => {
-      console.log(response)
     })
-
-    return this.albums
   }
 
   albums:Album[] = [

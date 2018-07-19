@@ -10,7 +10,10 @@ import { Album } from 'src/app/model/album';
 export class MusicSearchComponent implements OnInit {
 
   constructor(@Inject(MusicService) private musicService:MusicService) {
-    this.albums = musicService.getAlbums()
+    musicService.getAlbums().subscribe(response => {
+      this.albums = response.albums.items
+      console.log(response)
+    })
    }
 
   albums:Album[]
