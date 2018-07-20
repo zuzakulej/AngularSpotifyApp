@@ -8,12 +8,14 @@ import { environment } from '../../environments/environment.prod';
 import { MusicService } from './music.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule,
   ],
   declarations: [
     MusicSearchComponent,

@@ -3,7 +3,7 @@ import { Album } from 'src/app/model/album';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { SecurityService } from '../security/security.service';
 import { throwError, of, Subject } from '../../../node_modules/rxjs';
-import { catchError, map } from '../../../node_modules/rxjs/operators';
+import { catchError, map, switchMap } from '../../../node_modules/rxjs/operators';
 
 export const SEARCH_URL = new InjectionToken('URL for albums search API')
 
@@ -20,35 +20,30 @@ export class MusicService {
   
   constructor(@Inject('SEARCH_URL') private api_url,
   private http: HttpClient,
-  private security: SecurityService
-  ) {
-  this.queries.subscribe(query => {
-    this.http.get<AlbumsResponse>(this.api_url, {
-      headers: {
-        Authorization: 'Bearer ' + this.security.getToken()
-      },
-      params: {
+  private security: SecurityService) {
+    this.queries.pipe(
+      map(query => ({
         type: 'album',
         q: query
-      }
-    }).pipe(
-      map((response)=>{
-        return response.albums.items
-      }),
-      catchError( (err) => {
-        if( err instanceof HttpErrorResponse){
-          if(err.status == 401){
-            this.security.authorize()
-            return throwError(new Error('Access Denied'))
+      })),
+      switchMap(params => this.http.get<AlbumsResponse>(this.api_url, {
+          headers: {
+            Authorization: 'Bearer ' + this.security.getToken()
+          },
+          params
+        })),
+        map(response => response.albums.items),
+        catchError( (err) => {
+          if( err instanceof HttpErrorResponse){
+            if(err.status == 401){
+              this.security.authorize()
+              return throwError(new Error('Access Denied'))
+            }
           }
-        }
-        return of([])
-      })
-    ).subscribe(albums => {
-      this.albums.next(albums)
-    })
-  })
- }
+          return of([])
+        })
+    ).subscribe(albums => this.albums.next(albums))
+  }
 
 queries = new Subject<string>()
 albums = new Subject<Album[]>()
