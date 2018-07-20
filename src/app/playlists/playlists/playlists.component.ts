@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Playlist } from '../../model/playlist';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-playlists',
@@ -7,6 +8,12 @@ import { Playlist } from '../../model/playlist';
   styleUrls: ['./playlists.component.css']
 })
 export class PlaylistsComponent implements OnInit {
+
+select(playlist) {
+  this.router.navigate(['/playlists', playlist.id],{
+    queryParams:{placki:'YES'}
+  })
+}
 
 savePlaylist(playlist){
   const index = this.playlists.findIndex(p=>p.id == playlist.id)
@@ -38,7 +45,20 @@ savePlaylist(playlist){
 
   selected = this.playlists[0]
 
-constructor() { }
+constructor(
+  private route: ActivatedRoute, 
+  private router: Router) {
+  
+  const id = parseInt(route.snapshot.paramMap.get('id'))
+  //TODO fixing playlist  
+
+  const playlist = this.playlists.find(p => p.id == id)
+  if (playlist) {
+    this.selected = playlist
+  } else {
+    this.selected = this.playlists[0]
+  } 
+}
 
 ngOnInit() {
 }

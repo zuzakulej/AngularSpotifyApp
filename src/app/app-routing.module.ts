@@ -16,6 +16,15 @@ const routes: Routes = [
   {
     path:'playlists',
     component: PlaylistsComponent
+  },
+  {
+    path:'playlists/:id',
+    component: PlaylistsComponent
+  },
+  {
+    path: '**',
+    redirectTo: 'music',
+    pathMatch: 'full'
   }
 ]
 
