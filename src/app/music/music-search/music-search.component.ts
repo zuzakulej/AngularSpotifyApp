@@ -7,16 +7,34 @@ import { Album } from 'src/app/model/album';
   templateUrl: './music-search.component.html',
   styleUrls: ['./music-search.component.css']
 })
+// export class MusicSearchComponent implements OnInit {
+
+//   constructor(@Inject(MusicService) private musicService:MusicService) {
+//     musicService.getAlbums().subscribe(response => {
+//       this.albums = response.albums.items
+//       console.log(response)
+//     })
+//    }
+
+//   albums:Album[]
+
+//   ngOnInit() {
+//   }
+
+// }
 export class MusicSearchComponent implements OnInit {
 
-  constructor(@Inject(MusicService) private musicService:MusicService) {
-    musicService.getAlbums().subscribe(response => {
-      this.albums = response.albums.items
-      console.log(response)
-    })
-   }
+  albums: Album[]
+  error: string
 
-  albums:Album[]
+  constructor(private musicService: MusicService) {
+    musicService.getAlbums()
+      .subscribe(albums => {
+        this.albums = albums
+      }, err => {
+        this.error = err.message
+      })
+  }
 
   ngOnInit() {
   }

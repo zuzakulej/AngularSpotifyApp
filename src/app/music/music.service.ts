@@ -1,7 +1,9 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { Album } from 'src/app/model/album';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { SecurityService } from '../security/security.service';
+import { throwError, of } from '../../../node_modules/rxjs';
+import { catchError, map } from '../../../node_modules/rxjs/operators';
 
 export const SEARCH_URL = new InjectionToken('URL for albums search API')
 
@@ -22,16 +24,42 @@ export class MusicService {
   private security: SecurityService
 ) { }
 
+  // getAlbums(query = "batman") {
+  //   return this.http.get<AlbumsResponse>(this.api_url, {
+  //     headers: {
+  //       Authorization: 'Bearer ' + this.security.getToken()
+  //     },
+  //     params:{
+  //       type: 'album',
+  //       q: query,
+  //     }
+  //   })
+  // }
   getAlbums(query = "batman") {
-    return this.http.get(this.api_url, {
+
+    return this.http.get<AlbumsResponse>(this.api_url, {
       headers: {
         Authorization: 'Bearer ' + this.security.getToken()
       },
-      params:{
+      params: {
         type: 'album',
-        q: query,
+        q: query
       }
-    })
+    }).pipe(
+      map((response)=>{
+        return response.albums.items
+      }),
+      catchError( (err) => {
+        if( err instanceof HttpErrorResponse){
+          if(err.status == 401){
+            this.security.authorize()
+            return throwError(new Error('Access Denied'))
+          }
+        }
+        return of([])
+      })
+    )
+
   }
 
   albums:Album[] = [
