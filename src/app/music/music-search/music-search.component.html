@@ -5,6 +5,7 @@
 </div>
 <div class="row">
   <div class="col">
-    <app-albums-grid [albums]="albums"></app-albums-grid>
+    {{error}}
+    <app-albums-grid [albums]="albums | async"></app-albums-grid>
   </div>
 </div>

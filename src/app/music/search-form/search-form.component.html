@@ -1,5 +1,6 @@
 <form class="form-group mb-3" [formGroup]="queryForm">
   <input type="text" class="form-control" placeholder="Search" formControlName="query">
+  <div *ngIf="queryForm.pending">Please wait...</div>
   <ng-container *ngIf="queryForm.get('query').touched || queryForm.get('query').dirty">
     <div *ngIf="queryForm.get('query').hasError('required')">
       Field is required

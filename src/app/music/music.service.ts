@@ -2,7 +2,7 @@ import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { Album } from 'src/app/model/album';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { SecurityService } from '../security/security.service';
-import { throwError, of } from '../../../node_modules/rxjs';
+import { throwError, of, Subject } from '../../../node_modules/rxjs';
 import { catchError, map } from '../../../node_modules/rxjs/operators';
 
 export const SEARCH_URL = new InjectionToken('URL for albums search API')
@@ -18,26 +18,12 @@ interface AlbumsResponse{
 })
 export class MusicService {
   
-  constructor
-  (@Inject('SEARCH_URL') private api_url,
+  constructor(@Inject('SEARCH_URL') private api_url,
   private http: HttpClient,
   private security: SecurityService
-) { }
-
-  // getAlbums(query = "batman") {
-  //   return this.http.get<AlbumsResponse>(this.api_url, {
-  //     headers: {
-  //       Authorization: 'Bearer ' + this.security.getToken()
-  //     },
-  //     params:{
-  //       type: 'album',
-  //       q: query,
-  //     }
-  //   })
-  // }
-  getAlbums(query = "batman") {
-
-    return this.http.get<AlbumsResponse>(this.api_url, {
+  ) {
+  this.queries.subscribe(query => {
+    this.http.get<AlbumsResponse>(this.api_url, {
       headers: {
         Authorization: 'Bearer ' + this.security.getToken()
       },
@@ -58,36 +44,48 @@ export class MusicService {
         }
         return of([])
       })
-    )
+    ).subscribe(albums => {
+      this.albums.next(albums)
+    })
+  })
+ }
 
+queries = new Subject<string>()
+albums = new Subject<Album[]>()
+
+  search(query) {
+    this.queries.next(query)
   }
 
-  albums:Album[] = [
-    {
-      id:"a12",
-      name: "Ala",
-      artists: [],
-      images: [
-        {
-          url:"http://placekitten.com/300/300",
-          height:300,
-          width:300
-        }
-      ]
-    },
-    {
-      id:"b14",
-      name: "Basia",
-      artists: [],
-      images: [
-        {
-          url:"http://placekitten.com/300/300",
-          height:300,
-          width:300
-        }
-      ]
-    }
-  ]
+  getAlbums(query = "batman") {
+    return this.albums
+  }
 
-  
+  // albums:Album[] = [
+  //   {
+  //     id:"a12",
+  //     name: "Ala",
+  //     artists: [],
+  //     images: [
+  //       {
+  //         url:"http://placekitten.com/300/300",
+  //         height:300,
+  //         width:300
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     id:"b14",
+  //     name: "Basia",
+  //     artists: [],
+  //     images: [
+  //       {
+  //         url:"http://placekitten.com/300/300",
+  //         height:300,
+  //         width:300
+  //       }
+  //     ]
+  //   }
+  // ]
+
 }
