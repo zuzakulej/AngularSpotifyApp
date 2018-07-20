@@ -7,11 +7,13 @@ import { SearchFormComponent } from './search-form/search-form.component';
 import { environment } from '../../environments/environment.prod';
 import { MusicService } from './music.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   declarations: [
     MusicSearchComponent,
