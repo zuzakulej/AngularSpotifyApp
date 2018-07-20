@@ -28,7 +28,11 @@ export class MusicSearchComponent implements OnInit {
   error: string
 
   constructor(private musicService: MusicService) {
-    musicService.getAlbums()
+    this.search('batman')
+  }
+
+  search(query){
+    this.musicService.getAlbums(query)
       .subscribe(albums => {
         this.albums = albums
       }, err => {

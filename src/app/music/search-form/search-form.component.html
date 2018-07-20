@@ -1,6 +1,14 @@
-<div class="input-group mb-3" [formGroup]="queryForm">
+<form class="form-group mb-3" [formGroup]="queryForm">
   <input type="text" class="form-control" placeholder="Search" formControlName="query">
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary" type="button">Search</button>
-  </div>
-</div>
+  <ng-container *ngIf="queryForm.get('query').touched || queryForm.get('query').dirty">
+    <div *ngIf="queryForm.get('query').hasError('required')">
+      Field is required
+    </div>
+    <div *ngIf="queryForm.get('query').getError('minlength') as error">
+      Field is requires {{error.requiredLength}} characters
+    </div>
+    <div *ngIf="queryForm.get('query').hasError('censor')">
+      Field should not contain 'batman'
+    </div>
+  </ng-container>
+</form>
